@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- First version published from GitHub Actions, with npm provenance. No changes to the library.
+
 ## 0.1.0
 
 - `events.preview` takes every field of `events.publish` (all optional), so a preview can be checked exactly as the publish would be.

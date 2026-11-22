@@ -1,6 +1,6 @@
 {
   "name": "@agilisdating/ads",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The official Node.js and TypeScript library for the Agilis Advertising API",
   "license": "MIT",
   "author": "Agilis Dating Ltd <help@agilis.dating>",
