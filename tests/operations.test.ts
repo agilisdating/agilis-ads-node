@@ -210,8 +210,9 @@ const cases: Case[] = [
         location: [51.5, -0.1],
         crop: { x: 0, y: 0, w: 500 },
       }),
-    method: 'PATCH',
+    method: 'POST',
     path: '/events/3104',
+    headers: { 'X-HTTP-Method-Override': 'PATCH' },
     form: {
       title: ['Thursday Comedy Club'],
       'location[]': ['51.5', '-0.1'],
@@ -382,6 +383,11 @@ describe('operations', () => {
       }
       if (c.method !== 'POST' || !c.file) {
         expect(call.headers['X-HTTP-Method-Override']).toBe(c.headers?.['X-HTTP-Method-Override']);
+      }
+      if (c.name.startsWith('events.edit')) {
+        expect(call.method).toBe('POST');
+        expect(call.headers['X-HTTP-Method-Override']).toBe('PATCH');
+        expect(call.body).toBeInstanceOf(FormData);
       }
 
       if (c.json !== undefined) {
