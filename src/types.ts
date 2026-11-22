@@ -73,11 +73,13 @@ export type EventConfig = Ok<'getEventConfig'>;
 
 type CropFields = 'crop[x]' | 'crop[y]' | 'crop[w]';
 
+/** The fields of `events.publish`, all optional: a preview is checked exactly as a publish would be. */
 export type PreviewEventParams = Simplify<
-  Omit<WithOptionalEnvironment<FormBody<'previewEvent'>>, 'image' | CropFields> & {
-    image?: Uploadable;
-    crop?: Crop;
-  }
+  Omit<WithOptionalEnvironment<FormBody<'previewEvent'>>, 'image' | CropFields> &
+    Partial<Omit<PublishEventParams, 'image' | 'crop' | 'environment'>> & {
+      image?: Uploadable;
+      crop?: Crop;
+    }
 >;
 export type PreviewEventResponse = Ok<'previewEvent'>;
 
