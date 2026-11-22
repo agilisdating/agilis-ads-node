@@ -230,20 +230,19 @@ export class Events extends Resource {
   }
 
   /**
-   * PATCH /events/{event_id}: changes a published Event. With an image it is sent as POST
-   * with `X-HTTP-Method-Override: PATCH`.
+   * PATCH /events/{event_id}: changes a published Event. Always sent as a multipart POST
+   * with `X-HTTP-Method-Override: PATCH`, with or without an image.
    */
   edit(
     eventId: number | string,
     params: T.EditEventParams,
     options?: RequestOptions,
   ): Promise<WithResponse<T.EditEventResponse>> {
-    const withFile = params.image !== undefined && params.image !== null;
     return this.core.request({
-      method: withFile ? 'POST' : 'PATCH',
+      method: 'POST',
       path: `/events/${id(eventId)}`,
       form: params as Record<string, unknown>,
-      headers: withFile ? { 'X-HTTP-Method-Override': 'PATCH' } : undefined,
+      headers: { 'X-HTTP-Method-Override': 'PATCH' },
       options,
     });
   }

@@ -128,7 +128,7 @@ describe('retries', () => {
     expect(calls).toHaveLength(2);
   });
 
-  it('does not retry other POST or PATCH requests on 5xx', async () => {
+  it('does not retry other POST requests on 5xx, including events.edit', async () => {
     const post = setup([unavailable, json({ return_code: 'S1' })]);
     await expect(post.client.offers.pause(1)).rejects.toBeInstanceOf(ApiError);
     expect(post.calls).toHaveLength(1);

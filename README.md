@@ -130,7 +130,7 @@ Path parameters are arguments; everything else is one parameters object, with th
 - a `File`;
 - bytes or a stream with a file name: `image: { data: buffer, filename: 'offer.png' }`, where `data` is a `Buffer`, `Uint8Array`, `ArrayBuffer`, `Blob`, a web `ReadableStream` or a Node.js stream.
 
-The content type comes from the file name's extension (or pass `contentType`). Arrays are sent as repeated `location[]`, `gender[]` and `interests[]` parts, and `crop: { x, y, w }` is sent as `crop[x]`, `crop[y]` and `crop[w]`. `events.edit` with an image is sent as `POST` with `X-HTTP-Method-Override: PATCH`, as the API asks.
+The content type comes from the file name's extension (or pass `contentType`). Arrays are sent as repeated `location[]`, `gender[]` and `interests[]` parts, and `crop: { x, y, w }` is sent as `crop[x]`, `crop[y]` and `crop[w]`. `events.edit` is always sent as a multipart `POST` with `X-HTTP-Method-Override: PATCH`, with or without an image, as the API asks.
 
 ### Responses
 
