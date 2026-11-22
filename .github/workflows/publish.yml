@@ -33,5 +33,6 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run check:package
-      - name: Publish
-        run: npm publish --provenance --access public
+      # Staged: the version waits on npm until a maintainer approves it with 2FA.
+      - name: Stage the release on npm
+        run: npm stage publish --provenance --access public
