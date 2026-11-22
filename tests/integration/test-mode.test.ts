@@ -11,7 +11,16 @@ if (apiKey.startsWith('pk_live_')) {
   throw new Error('Refusing to run the integration tests with a Live key. Use a pk_test_ key.');
 }
 
-const image = fileURLToPath(new URL('../fixtures/sample-offer.png', import.meta.url));
+// Offer images: 1080 x 1080. Event images must be at least 1280 x 720.
+const offerImage = fileURLToPath(new URL('../fixtures/sample-offer.png', import.meta.url));
+const eventImage = fileURLToPath(new URL('../fixtures/sample-event.png', import.meta.url));
+
+// A refusal sent with HTTP 200 (for example a balance too low) still shows the request was
+// understood. A 400 or 422 means the request itself was wrong, so the test fails.
+function expectBusinessRefusal(error: unknown): void {
+  expect(error).toBeInstanceOf(InvalidRequestError);
+  expect((error as InvalidRequestError).status).toBe(200);
+}
 
 function future(days: number): string {
   const date = new Date(Date.now() + days * 86_400_000);
@@ -81,7 +90,7 @@ describe.skipIf(apiKey === '')('Test mode', () => {
           push_notification_title: 'SDK dry run',
           push_notification_message: 'A dry run from the Node.js SDK tests.',
           url: 'https://www.agilis.dating',
-          image,
+          image: offerImage,
           location: [51.5074, -0.1278],
           radius: 10,
           start_datetime: future(7),
@@ -92,8 +101,7 @@ describe.skipIf(apiKey === '')('Test mode', () => {
       );
       expect(result.return_code).toMatch(/^S/);
     } catch (error) {
-      // A refusal (for example a balance too low) still shows the request was understood.
-      expect(error).toBeInstanceOf(InvalidRequestError);
+      expectBusinessRefusal(error);
     }
   });
 
@@ -111,14 +119,14 @@ describe.skipIf(apiKey === '')('Test mode', () => {
           starts_at: future(14),
           ends_at: future(14.125),
           url: 'https://www.agilis.dating',
-          image,
+          image: eventImage,
           payment_method: 'B',
         },
         { dryRun: true },
       );
       expect(result.return_code).toMatch(/^S/);
     } catch (error) {
-      expect(error).toBeInstanceOf(InvalidRequestError);
+      expectBusinessRefusal(error);
     }
   });
 });
